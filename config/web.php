@@ -33,10 +33,10 @@ $config = [
             // for the mailer to send real emails.
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.gmail.com',
-                'username' => 'machado.andref@gmail.com', // <------------ inserir um mail de admin
-                'password' => '',  // <------------- meter a pass do mail acima
-                'port' => '587',
+                'host' => 'smtp.mailtrap.io',
+                'username' => 'e8d53a01121d93', // <------------ inserir um mail de admin
+                'password' => 'd486689d8fb394',  // <------------- meter a pass do mail acima
+                'port' => '2525',
                 'encryption' => 'tls',
             ],
         ],
