@@ -20,9 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($admin, 'nome')->textInput() ?>
     <?= $form->field($admin, 'apelido')->textInput() ?>
     <?= $form->field($admin, 'email')->textInput() ?>
-    <?= $form->field($admin, 'telefone1')->textInput() ?>
-    <?= $form->field($admin, 'telefone2')->textInput() ?>
-    <?= $form->field($user, 'password')->passwordInput() ?>
+    <?= $form->field($admin, 'telefone1')->textInput()->label('Telefone 1') ?>
+    <?= $form->field($admin, 'telefone2')->textInput()->label('Telefone 2') ?>
+    <?= $form->field($user, 'rawPassword')->passwordInput()->label('Password') ?>
 
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">

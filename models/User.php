@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\base\Exception;
 
 /**
  * This is the model class for table "User".
@@ -30,6 +31,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
     public $password;
     public $accessToken;
+    public $rawPassword;
 
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
@@ -48,7 +50,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'tipo', 'password_hash', 'auth_key', 'status'], 'required'],
+            [['username', 'tipo', 'password_hash', 'auth_key', 'status', 'rawPassword'], 'required'],
             [['tipo'], 'string'],
             [['status', 'created_at', 'updated_at', 'idAdministrador', 'idAgente', 'idCliente'], 'integer'],
             [['username', 'password_hash', 'password_reset_token', 'verification_token'], 'string', 'max' => 255],
@@ -149,7 +151,8 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        return static::findOne($id);
+        //return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
     }
 
     /**
@@ -157,13 +160,14 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        foreach (self::$users as $user) {
+        return static::findOne(['auth_key' => $token]);
+        /*foreach (self::$users as $user) {
             if ($user['accessToken'] === $token) {
                 return new static($user);
             }
         }
 
-        return null;
+        return null;*/
     }
 
     /**
@@ -174,12 +178,13 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public static function findByUsername($username)
     {
-        foreach (self::$users as $user){
+        return self::findOne(['username' => $username]);
+        /*foreach (self::$users as $user){
             if(strcasecmp($user['username'], $username) === 0){
                 return new static($user);
             }
         }
-        return null;
+        return null;*/
     }
 
     /**
@@ -195,6 +200,29 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         $this->auth_key = Yii::$app->security->generateRandomString();
     }
 
+    public static function findByVerificationToken($token) {
+        return static::findOne([
+            'verification_token' => $token,
+            'status' => self::STATUS_INACTIVE
+        ]);
+    }
+
+    /**
+     * Finds out if password reset token is valid
+     *
+     * @param string $token password reset token
+     * @return bool
+     */
+    public static function isPasswordResetTokenValid($token)
+    {
+        if (empty($token)) {
+            return false;
+        }
+
+        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $expire = Yii::$app->params['user.passwordResetTokenExpire'];
+        return $timestamp + $expire >= time();
+    }
     /**
      * {@inheritdoc}
      */
@@ -219,11 +247,15 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function validatePassword($password)
     {
-        return $this->password === $password;
+        return Yii::$app->security->validatePassword($password, $this->password_hash);
+        //return $this->password === $password;
     }
 
     public function setPassword($password)
     {
-        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+        try {
+            $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+        } catch (Exception $e) {
+        }
     }
 }

@@ -95,7 +95,7 @@ class SiteController extends Controller
         $admin = new Administrador();
 
         if($user->load(Yii::$app->request->post()) && $admin->load(Yii::$app->request->post())){
-            $user->setPassword($user->password);
+            $user->setPassword($user->rawPassword);
             $user->tipo = "admin";
             $user->status = 10;
             //$user->created_at = date('Y-m-d');
