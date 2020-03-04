@@ -2,6 +2,9 @@
 
 namespace app\controllers;
 
+use app\models\Administrador;
+use app\models\SignupForm;
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -80,9 +83,34 @@ class SiteController extends Controller
             return $this->goBack();
         }
 
-        $model->password = '';
         return $this->render('login', [
             'model' => $model,
+        ]);
+    }
+
+    public function actionSignup()
+    {
+        $user = new User();
+        $admin = new Administrador();
+
+        if($user->load(Yii::$app->request->post()) && $admin->load(Yii::$app->request->post())){
+            $user->setPassword($user->password);
+            $user->tipo = "admin";
+            $user->status = 10;
+            //$user->created_at = date('Y-m-d');
+            $user->generateAuthKey();
+            if($user->validate() && $admin->validate()){
+                $user->save();
+                $admin->save();
+                Yii::$app->session->setFlash('success', 'Utilizador registado com sucesso.');
+
+                return $this->redirect('login');
+            }
+
+        }
+        return $this->render('signup', [
+            'user' => $user,
+            'admin' => $admin,
         ]);
     }
 
@@ -107,7 +135,7 @@ class SiteController extends Controller
     {
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()){
-            if($model->sendEmail(Yii::$app->params['adminEmail'])) {
+            if($model->contact(Yii::$app->params['adminEmail'])) {
                 Yii::$app->session->setFlash('Success', 'Thanks for contacting us');
             }else{
                 Yii::$app->session->setFlash('error', 'An error occurred');
