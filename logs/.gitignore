@@ -1,0 +1,3 @@
+#nao envia os logs
+access.log
+error.log
