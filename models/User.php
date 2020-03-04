@@ -174,7 +174,12 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return  static::findOne(['username' => $username]);
+        foreach (self::$users as $user){
+            if(strcasecmp($user['username'], $username) === 0){
+                return new static($user);
+            }
+        }
+        return null;
     }
 
     /**
@@ -214,7 +219,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function validatePassword($password)
     {
-        return Yii::$app->security->validatePassword($password, $this->password);
+        return $this->password === $password;
     }
 
     public function setPassword($password)
