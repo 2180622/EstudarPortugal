@@ -2,103 +2,117 @@
 
 namespace app\models;
 
-class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
+use Yii;
+
+/**
+ * This is the model class for table "User".
+ *
+ * @property int $idUser
+ * @property string $username
+ * @property string $tipo
+ * @property string $password_hash
+ * @property string|null $password_reset_token
+ * @property string|null $verification_token
+ * @property string $auth_key
+ * @property int $status
+ * @property int|null $created_at
+ * @property int|null $updated_at
+ * @property int|null $idAdministrador
+ * @property int|null $idAgente
+ * @property int|null $idCliente
+ *
+ * @property Agenda[] $agendas
+ * @property Administrador $idAdministrador0
+ * @property Agente $idAgente0
+ * @property Cliente $idCliente0
+ */
+class User extends \yii\db\ActiveRecord
 {
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
-
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
-
-
     /**
      * {@inheritdoc}
      */
-    public static function findIdentity($id)
+    public static function tableName()
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        return 'User';
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function findIdentityByAccessToken($token, $type = null)
+    public function rules()
     {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        return [
+            [['username', 'tipo', 'password_hash', 'auth_key', 'status'], 'required'],
+            [['tipo'], 'string'],
+            [['status', 'created_at', 'updated_at', 'idAdministrador', 'idAgente', 'idCliente'], 'integer'],
+            [['username', 'password_hash', 'password_reset_token', 'verification_token'], 'string', 'max' => 255],
+            [['auth_key'], 'string', 'max' => 50],
+            [['username'], 'unique'],
+            [['idAdministrador'], 'exist', 'skipOnError' => true, 'targetClass' => Administrador::className(), 'targetAttribute' => ['idAdministrador' => 'idAdmin']],
+            [['idAgente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['idAgente' => 'idAgente']],
+            [['idCliente'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['idCliente' => 'idCliente']],
+        ];
     }
 
     /**
-     * Finds user by username
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'idUser' => 'Id User',
+            'username' => 'Username',
+            'tipo' => 'Tipo',
+            'password_hash' => 'Password Hash',
+            'password_reset_token' => 'Password Reset Token',
+            'verification_token' => 'Verification Token',
+            'auth_key' => 'Auth Key',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'idAdministrador' => 'Id Administrador',
+            'idAgente' => 'Id Agente',
+            'idCliente' => 'Id Cliente',
+        ];
+    }
+
+    /**
+     * Gets query for [[Agendas]].
      *
-     * @param string $username
-     * @return static|null
+     * @return \yii\db\ActiveQuery
      */
-    public static function findByUsername($username)
+    public function getAgendas()
     {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        return $this->hasMany(Agenda::className(), ['IdUser' => 'idUser']);
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAuthKey()
-    {
-        return $this->authKey;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function validateAuthKey($authKey)
-    {
-        return $this->authKey === $authKey;
-    }
-
-    /**
-     * Validates password
+     * Gets query for [[IdAdministrador0]].
      *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
+     * @return \yii\db\ActiveQuery
      */
-    public function validatePassword($password)
+    public function getIdAdministrador0()
     {
-        return $this->password === $password;
+        return $this->hasOne(Administrador::className(), ['idAdmin' => 'idAdministrador']);
+    }
+
+    /**
+     * Gets query for [[IdAgente0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdAgente0()
+    {
+        return $this->hasOne(Agente::className(), ['idAgente' => 'idAgente']);
+    }
+
+    /**
+     * Gets query for [[IdCliente0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdCliente0()
+    {
+        return $this->hasOne(Cliente::className(), ['idCliente' => 'idCliente']);
     }
 }
