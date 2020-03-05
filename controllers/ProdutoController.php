@@ -10,9 +10,9 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * PodutoController implements the CRUD actions for Produto model.
+ * ProdutoController implements the CRUD actions for Produto model.
  */
-class PodutoController extends Controller
+class ProdutoController extends Controller
 {
     /**
      * {@inheritdoc}
