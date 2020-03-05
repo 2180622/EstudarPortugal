@@ -7,12 +7,11 @@
 <!-- Favicon -->
 <link rel="shortcut icon" href="#" type="image/x-icon">
 
-
 <!-- Bootstrap CSS -->
-<link href="../../../web/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 <!-- CSS MASTER -->
-<link href="../../../web/css/master.css" rel="stylesheet">
+<link href="/css/master.css" rel="stylesheet">
 
 
 <!-- FontAwesome -->
