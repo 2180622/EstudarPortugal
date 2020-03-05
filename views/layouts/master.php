@@ -19,7 +19,7 @@
 
         
         <!-- Conteudo Principal -->
-        <div class="col col-8 h-100"><?php include __DIR__ . 'dashboard.php' ?></div>
+        <div class="col col-8 h-100"></div>
 
 
         <!-- Barra Direita (notificações) -->

@@ -9,7 +9,7 @@ require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
  */
 
 
-require __DIR__ . '/layout/master.php';
+require '../views/layouts/master.php';
 
 
 

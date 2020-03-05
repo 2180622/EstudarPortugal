@@ -9,10 +9,10 @@
 
 
 <!-- Bootstrap CSS -->
-<link href="../../css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="../../../web/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 <!-- CSS MASTER -->
-<link href="../../css/master.css" rel="stylesheet">
+<link href="../../../web/css/master.css" rel="stylesheet">
 
 
 <!-- FontAwesome -->
