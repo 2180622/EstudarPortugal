@@ -5,16 +5,15 @@
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
-    <div class="body-content">
-
+    <div class="body-content" >
+        <div>
+            <h4>Navegação Rápida</h4>
+        </div>
         <div class="row">
-            <div class="col-lg-8">
-                <h1>Heading</h1>
+            <div class="col-lg-4">
 
-                <h3>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</h3>
+            </div>
+            <div class="col-lg-4">
             </div>
             <div class="col-lg-4">
                 <h1>Heading</h1>
