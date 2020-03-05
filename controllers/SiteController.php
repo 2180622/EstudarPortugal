@@ -167,4 +167,55 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+    public function GetNotifications(){
+        if(Yii::$app->user->isGest){
+            return null;
+        }
+        /****************************** NOTIFICAÇÕES PARA EVENTOS *******************************/
+        $modelAgenda = new Agenda();
+        $Agendas = null;
+        if(Yii::$app->user->identity->tipo == 'admin' && Yii::$app->user->identity->idAdmin != null){
+            $Agendas = $modelAgenda->find()->where('idAdmin = '.Yii::$app->user->identity->idAdmin.' or visibilidade = 1')->orderBy('dataInicio')->all();
+        }
+        if(Yii::$app->user->identity->tipo == 'agente' && Yii::$app->user->identity->idAgente != null){
+            $Agendas = $modelAgenda->find()->where('idAgente = '.Yii::$app->user->identity->idAgente.' or visibilidade = 1')->all();
+        }
+        /**************************** NOTIFICAÇÕES PARA ANIVERSARIOS ****************************/
+        $modelAdmin = new Administrador();
+        $modelAgente = new Agente();
+        $modelCliente = new Cliente();
+        $Agentes = $modelAgente->find()->where('dayofmonth(dataNasc) = dayofmonth(CURRENT_DATE()) and month(dataNasc) = month(CURRENT_DATE()) and tipo like "Agente" and deleted_at = 0')->all();
+        $Admins = $modelAdmin->find()->where('dayofmonth(dataNasc) = dayofmonth(CURRENT_DATE()) and month(dataNasc) = month(CURRENT_DATE()) and deleted_at = 0')->all();
+        $Clientes = null;
+        $Clients = $modelCliente->find()->where('dayofmonth(dataNasc) = dayofmonth(CURRENT_DATE()) and month(dataNasc) = month(CURRENT_DATE())')->all();
+        if(Yii::$app->user->identity->tipo == 'admin' && Yii::$app->user->identity->idAdmin != null){
+            $Clientes = $Clients;
+        }
+        if(Yii::$app->user->identity->tipo == 'agente' && Yii::$app->user->identity->idAgente != null){
+            $SubAgentes = $modelAgente->find()->where('dayofmonth(dataNasc) = dayofmonth(CURRENT_DATE()) and month(dataNasc) = month(CURRENT_DATE()) and tipo like "Subagente" and deleted_at = 0')->all();
+            $Produtos = Yii::$app->user->identity->getProdutos()->all();
+            foreach($Produtos as $Produto){
+                $ClienteRepetido = 0;
+                $Cliente = $Produto->getIdCliente0()->one();
+                foreach($Clients as $Cli){
+                    if($Cliente == $Cli){
+                        $repetido = 1;
+                    }
+                }
+                if($repetido==0){
+                    if($Clientes){
+                        $Clientes[] = $Cliente;
+                    }
+                }
+            }
+        }
+        if(Yii::$app->user->identity->tipo == 'cliente'){
+            $Admins = null;
+        }
+        /*************************** NOTIFICAÇÕES PARA SEU ANIVERSARIO **************************/
+        /*************************** NOTIFICAÇÕES PARA INICIO PRODUTOS **************************/
+        /************************** NOTIFICAÇÕES PARA VENCIMENTO FASES **************************/
+        /************************* NOTIFICAÇÕES PARA DOCUMENTOS EM FALTA ************************/
+    }
 }
