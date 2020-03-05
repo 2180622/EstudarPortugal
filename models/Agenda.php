@@ -9,9 +9,9 @@ use Yii;
  *
  * @property int $idAgenda
  * @property string $descricao
- * @property string $data
- * @property string $horaInicio
- * @property string $horaFim
+ * @property int $Visibilidade
+ * @property string $dataInicio
+ * @property string $dataFim
  * @property string $dataCriacao
  * @property int $idUser
  *
@@ -33,10 +33,10 @@ class Agenda extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['descricao', 'data', 'horaInicio', 'horaFim', 'idUser'], 'required'],
+            [['descricao', 'dataInicio', 'dataFim', 'idUser'], 'required'],
             [['descricao'], 'string'],
-            [['data', 'horaInicio', 'horaFim', 'dataCriacao'], 'safe'],
-            [['idUser'], 'integer'],
+            [['Visibilidade', 'idUser'], 'integer'],
+            [['dataInicio', 'dataFim', 'dataCriacao'], 'safe'],
             [['IdUser'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['IdUser' => 'idUser']],
         ];
     }
@@ -49,9 +49,9 @@ class Agenda extends \yii\db\ActiveRecord
         return [
             'idAgenda' => 'Id Agenda',
             'descricao' => 'Descricao',
-            'data' => 'Data',
-            'horaInicio' => 'Hora Inicio',
-            'horaFim' => 'Hora Fim',
+            'Visibilidade' => 'Visibilidade',
+            'dataInicio' => 'Data Inicio',
+            'dataFim' => 'Data Fim',
             'dataCriacao' => 'Data Criacao',
             'idUser' => 'Id User',
         ];
