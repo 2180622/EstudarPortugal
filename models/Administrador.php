@@ -11,6 +11,7 @@ use Yii;
  * @property string $nome
  * @property string $apelido
  * @property string $email
+ * @property string|null $fotografia
  * @property int $telefone1
  * @property int|null $telefone2
  * @property string $dataRegist
@@ -37,7 +38,7 @@ class Administrador extends \yii\db\ActiveRecord
             [['nome', 'apelido', 'email', 'telefone1'], 'required'],
             [['telefone1', 'telefone2', 'deleted_at'], 'integer'],
             [['dataRegist'], 'safe'],
-            [['nome', 'apelido', 'email'], 'string', 'max' => 255],
+            [['nome', 'apelido', 'email', 'fotografia'], 'string', 'max' => 255],
             [['email'], 'unique'],
         ];
     }
@@ -52,6 +53,7 @@ class Administrador extends \yii\db\ActiveRecord
             'nome' => 'Nome',
             'apelido' => 'Apelido',
             'email' => 'Email',
+            'fotografia' => 'Fotografia',
             'telefone1' => 'Telefone1',
             'telefone2' => 'Telefone2',
             'dataRegist' => 'Data Regist',

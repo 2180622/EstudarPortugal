@@ -9,10 +9,12 @@ use Yii;
  *
  * @property int $idContacto
  * @property string $nome
- * @property int|null $telefone
- * @property int|null $telemovel
+ * @property string|null $fotografia
+ * @property int|null $telefone1
+ * @property int|null $telefone2
  * @property string|null $email
  * @property int|null $fax
+ * @property string|null $observacao
  */
 class Contacto extends \yii\db\ActiveRecord
 {
@@ -31,8 +33,9 @@ class Contacto extends \yii\db\ActiveRecord
     {
         return [
             [['nome'], 'required'],
-            [['telefone', 'telemovel', 'fax'], 'integer'],
-            [['nome', 'email'], 'string', 'max' => 255],
+            [['telefone1', 'telefone2', 'fax'], 'integer'],
+            [['observacao'], 'string'],
+            [['nome', 'fotografia', 'email'], 'string', 'max' => 255],
         ];
     }
 
@@ -44,10 +47,12 @@ class Contacto extends \yii\db\ActiveRecord
         return [
             'idContacto' => 'Id Contacto',
             'nome' => 'Nome',
-            'telefone' => 'Telefone',
-            'telemovel' => 'Telemovel',
+            'fotografia' => 'Fotografia',
+            'telefone1' => 'Telefone1',
+            'telefone2' => 'Telefone2',
             'email' => 'Email',
             'fax' => 'Fax',
+            'observacao' => 'Observacao',
         ];
     }
 }
