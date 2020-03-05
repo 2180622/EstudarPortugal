@@ -18,6 +18,7 @@ class SiteController extends Controller
     /**
      * {@inheritdoc}
      */
+
     public function behaviors()
     {
         return [
@@ -74,6 +75,9 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+
+        $this->layout= 'loginLayout';
+
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -87,44 +91,6 @@ class SiteController extends Controller
         return $this->render('login', [
             'model' => $model,
         ]);
-    }
-
-    public function actionSignup()
-    {
-        $user = new User();
-        $admin = new Administrador();
-
-        if($user->load(Yii::$app->request->post()) && $admin->load(Yii::$app->request->post())){
-            $user->setPassword($user->password);
-            $user->tipo = "admin";
-            $user->status = 10;
-            //$user->created_at = date('Y-m-d');
-            $user->generateAuthKey();
-            if($user->validate() && $admin->validate()){
-                $user->save();
-                $admin->save();
-                Yii::$app->session->setFlash('success', 'Utilizador registado com sucesso.');
-
-                return $this->redirect('login');
-            }
-
-        }
-        return $this->render('signup', [
-            'user' => $user,
-            'admin' => $admin,
-        ]);
-    }
-
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
     }
 
     /**
@@ -147,6 +113,49 @@ class SiteController extends Controller
         return $this->render('contact', [
             'model' => $model,
         ]);
+    }
+
+    public function actionSignup()
+    {
+        $user = new User();
+        $admin = new Administrador();
+
+        if($user->load(Yii::$app->request->post()) && $admin->load(Yii::$app->request->post())){
+            $user->setPassword($user->rawPassword);
+            $user->tipo = "admin";
+            $user->status = 10;
+            //$user->created_at = date('Y-m-d');
+            $user->generateAuthKey();
+            if($user->validate() && $admin->validate()){
+                $user->save();
+                $admin->save();
+                Yii::$app->mailer->compose()
+                    ->setTo(Yii::$app->params['adminEmail'])
+                    ->setFrom('andre.machad0@hotmail.com')
+                    ->setTextBody('Thanks for Signing up!')
+                    ->send();
+                Yii::$app->session->setFlash('success', 'Utilizador registado com sucesso.');
+
+                return $this->redirect('login');
+            }
+
+        }
+        return $this->render('signup', [
+            'user' => $user,
+            'admin' => $admin,
+        ]);
+    }
+
+    /**
+     * Logout action.
+     *
+     * @return Response
+     */
+    public function actionLogout()
+    {
+        Yii::$app->user->logout();
+
+        return $this->goHome();
     }
 
     /**
