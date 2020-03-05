@@ -79,6 +79,14 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $model = new LoginForm();
+
+        if (Yii::$app->user->isGuest) {
+            return $this->render('login', [
+                'model' => $model
+            ]);
+        }
+
         return $this->render('index');
     }
 
@@ -89,17 +97,17 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-
         $this->layout= 'loginLayout';
 
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            $this->layout= 'main';
+            return $this->render('index');
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-
-            return $this->goBack();
+            $this->layout= 'main';
+            return $this->render('index');
         }
 
         return $this->render('login', [
