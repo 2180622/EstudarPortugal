@@ -8,7 +8,6 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
 $this->title = 'Criar um admin';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
 

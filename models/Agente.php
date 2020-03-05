@@ -11,6 +11,7 @@ use Yii;
  * @property string $nome
  * @property string $apelido
  * @property string $email
+ * @property string|null $fotografia
  * @property string $morada
  * @property string $pais
  * @property string $NIF
@@ -44,7 +45,7 @@ class Agente extends \yii\db\ActiveRecord
             [['telefoneW', 'telefone2', 'deleted_at'], 'integer'],
             [['tipo'], 'string'],
             [['dataRegist'], 'safe'],
-            [['nome', 'apelido', 'email', 'morada', 'pais', 'NIF'], 'string', 'max' => 255],
+            [['nome', 'apelido', 'email', 'fotografia', 'morada', 'pais', 'NIF'], 'string', 'max' => 255],
             [['email'], 'unique'],
             [['NIF'], 'unique'],
         ];
@@ -60,6 +61,7 @@ class Agente extends \yii\db\ActiveRecord
             'nome' => 'Nome',
             'apelido' => 'Apelido',
             'email' => 'Email',
+            'fotografia' => 'Fotografia',
             'morada' => 'Morada',
             'pais' => 'Pais',
             'NIF' => 'Nif',

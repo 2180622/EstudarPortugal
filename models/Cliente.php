@@ -29,7 +29,7 @@ use Yii;
  * @property string|null $nomeMae
  * @property int|null $telefoneMae
  * @property string|null $emailMae
- * @property string $fotografia
+ * @property string|null $fotografia
  * @property int $NIF
  * @property string $IBAN
  * @property int $nivEstudoAtual
@@ -59,7 +59,7 @@ class Cliente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nome', 'apelido', 'email', 'telefone1', 'dataNasc', 'numCCid', 'numPassaport', 'dataValidPP', 'paisEmissaoPP', 'paisNaturalidade', 'morada', 'cidade', 'poradaResidencia', 'passaportPaisEmi', 'fotografia', 'NIF', 'IBAN', 'nivEstudoAtual', 'nomeInstituicaoOrigem', 'cidadeInstituicaoOrigem'], 'required'],
+            [['nome', 'apelido', 'email', 'telefone1', 'dataNasc', 'numCCid', 'numPassaport', 'dataValidPP', 'paisEmissaoPP', 'paisNaturalidade', 'morada', 'cidade', 'poradaResidencia', 'passaportPaisEmi', 'NIF', 'IBAN', 'nivEstudoAtual', 'nomeInstituicaoOrigem', 'cidadeInstituicaoOrigem'], 'required'],
             [['telefone1', 'telefone2', 'telefonePai', 'telefoneMae', 'NIF', 'nivEstudoAtual'], 'integer'],
             [['dataNasc', 'dataValidPP', 'dataRegist'], 'safe'],
             [['obsPessoais', 'obsFinanceiras', 'obsAcademicas'], 'string'],
