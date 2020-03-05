@@ -209,15 +209,39 @@ class SiteController extends Controller
         $modelCliente = new Cliente();
         $Agentes = $modelAgente->find()->where('dayofmonth(dataNasc) = dayofmonth(CURRENT_DATE()) and month(dataNasc) = month(CURRENT_DATE()) and tipo like "Agente" and deleted_at = 0')->all();
         $Admins = $modelAdmin->find()->where('dayofmonth(dataNasc) = dayofmonth(CURRENT_DATE()) and month(dataNasc) = month(CURRENT_DATE()) and deleted_at = 0')->all();
+        $SubAgentes = null;
         $Clientes = null;
         $Clients = $modelCliente->find()->where('dayofmonth(dataNasc) = dayofmonth(CURRENT_DATE()) and month(dataNasc) = month(CURRENT_DATE())')->all();
         if(Yii::$app->user->identity->tipo == 'admin' && Yii::$app->user->identity->idAdmin != null){
             $Clientes = $Clients;
         }
         if(Yii::$app->user->identity->tipo == 'agente' && Yii::$app->user->identity->idAgente != null){
-            $SubAgentes = $modelAgente->find()->where('dayofmonth(dataNasc) = dayofmonth(CURRENT_DATE()) and month(dataNasc) = month(CURRENT_DATE()) and tipo like "Subagente" and deleted_at = 0')->all();
+            $Subs = $modelAgente->find()->where('dayofmonth(dataNasc) = dayofmonth(CURRENT_DATE()) and month(dataNasc) = month(CURRENT_DATE()) and tipo like "Subagente" and deleted_at = 0')->all();
             $Produtos = Yii::$app->user->identity->getProdutos()->all();
             foreach($Produtos as $Produto){
+                if($Produto->idSubAgente){
+                    foreach($Subs as $SubAgente){
+                        $SubAgenteRepetido = 0;
+                        $sub = $Produto->getIdSubAgente0()->one();
+                        if($SubAgentes){
+                            foreach($SubAgentes as $agente){
+                                if($sub==$agente){
+                                    $SubAgenteRepetido = 1;
+                                }
+                            }
+                        }
+                        if($sub == $SubAgente && $SubAgenteRepetido == 0){
+                            if($SubAgentes){
+                                $SubAgentes[] = $sub;
+                            }else{
+                                $SubAgentes = $sub;
+                            }
+                        }
+                    }
+                }
+                if($Produto == $Cli){
+                    $repetido = 1;
+                }
                 $ClienteRepetido = 0;
                 $Cliente = $Produto->getIdCliente0()->one();
                 foreach($Clients as $Cli){
@@ -228,14 +252,34 @@ class SiteController extends Controller
                 if($repetido==0){
                     if($Clientes){
                         $Clientes[] = $Cliente;
+                    }else{
+                        $Clientes = $Cliente;
                     }
                 }
             }
         }
-        if(Yii::$app->user->identity->tipo == 'cliente'){
+        if(Yii::$app->user->identity->tipo == 'cliente' && Yii::$app->user->identity->idCliente != null){
             $Admins = null;
+            $SubAgentes = null;
         }
         /*************************** NOTIFICAÇÕES PARA SEU ANIVERSARIO **************************/
+        $dataNasc = null;
+        $dataHoje = new DateTime();
+        if(Yii::$app->user->identity->tipo == 'admin' && Yii::$app->user->identity->idAdmin != null){
+            $Admin = Yii::$app->user->identity->getIdAdministrador0()->one();
+            $dataNasc = new DateTime($Admin->dataNasc);
+        }
+        if(Yii::$app->user->identity->tipo == 'agente' && Yii::$app->user->identity->idAgente != null){
+            $Agente = Yii::$app->user->identity->getIdAgente0()->one();
+            $dataNasc = new DateTime($Agente->dataNasc);
+        }
+        if(Yii::$app->user->identity->tipo == 'cliente' && Yii::$app->user->identity->idCliente != null){
+            $Cliente = Yii::$app->user->identity->getIdCliente0()->one();
+            $dataNasc = new DateTime($Cliente->dataNasc);
+        }
+        $diff = $datetime1->diff($datetime2);
+        //                                                                                             return $diff->y;
+        
         /*************************** NOTIFICAÇÕES PARA INICIO PRODUTOS **************************/
         /************************** NOTIFICAÇÕES PARA VENCIMENTO FASES **************************/
         /************************* NOTIFICAÇÕES PARA DOCUMENTOS EM FALTA ************************/
