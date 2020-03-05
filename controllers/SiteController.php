@@ -89,6 +89,28 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * Displays contact page.
+     *
+     * @return Response|string
+     */
+    public function actionContact()
+    {
+        $model = new ContactForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()){
+            if($model->contact(Yii::$app->params['adminEmail'])) {
+                Yii::$app->session->setFlash('Success', 'Thanks for contacting us');
+            }else{
+                Yii::$app->session->setFlash('error', 'An error occurred');
+            }
+
+            return $this->refresh();
+        }
+        return $this->render('contact', [
+            'model' => $model,
+        ]);
+    }
+
     public function actionSignup()
     {
         $user = new User();
@@ -103,6 +125,11 @@ class SiteController extends Controller
             if($user->validate() && $admin->validate()){
                 $user->save();
                 $admin->save();
+                Yii::$app->mailer->compose()
+                    ->setTo(Yii::$app->params['adminEmail'])
+                    ->setFrom('andre.machad0@hotmail.com')
+                    ->setTextBody('Thanks for Signing up!')
+                    ->send();
                 Yii::$app->session->setFlash('success', 'Utilizador registado com sucesso.');
 
                 return $this->redirect('login');
@@ -125,28 +152,6 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
-    }
-
-    /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()){
-            if($model->contact(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('Success', 'Thanks for contacting us');
-            }else{
-                Yii::$app->session->setFlash('error', 'An error occurred');
-            }
-
-            return $this->refresh();
-        }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
     }
 
     /**
