@@ -20,6 +20,3 @@
 
     <!-- Tipo de Letra da aplicação -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800&display=swap" rel="stylesheet">
-
-
-</head>

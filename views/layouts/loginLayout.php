@@ -1,8 +1,4 @@
 <?php
-
-/* @var $this \yii\web\View */
-/* @var $content string */
-
 use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
@@ -12,9 +8,11 @@ use app\assets\AppAsset;
 
 AppAsset::register($this);
 ?>
+
 <?php $this->beginPage() ?>
+
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html lang="pt">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

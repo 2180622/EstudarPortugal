@@ -1,8 +1,4 @@
 <?php
-
-/* @var $this \yii\web\View */
-/* @var $content string */
-
 use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
@@ -12,13 +8,13 @@ use app\assets\AppAsset;
 
 AppAsset::register($this);
 ?>
-<?php // $this->beginPage() ?>
+<?php $this->beginPage() ?>
+
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 
 <!-- head - CSS Styles -->
 <?php require __DIR__ . '/partials/head.php' ?>
-<head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,11 +23,9 @@ AppAsset::register($this);
     <?php $this->head() ?>
 </head>
 
-
-
 <!-- body - SECÇÃO PRINCIPAL -->
 <body>
-<?php //$this->beginBody() ?>
+<?php $this->beginBody() ?>
 
 <div class="container-fluid">
     <div class="row " >
@@ -43,7 +37,7 @@ AppAsset::register($this);
 
         <!-- Conteudo Principal -->
         <div class="col col-8 col-sm-8 col-md-8 col-lg-8" >
-            <?php require __DIR__ . '/testcontent.php' ?>
+            <?=$content ?>
         </div>
 
 
@@ -60,7 +54,7 @@ AppAsset::register($this);
 <!-- footer - JS Scripts -->
 <?php require __DIR__ . '/partials/footer.php' ?>
 
-<?php //$this->endBody() ?>
+<?php $this->endBody() ?>
 </body>
 
 

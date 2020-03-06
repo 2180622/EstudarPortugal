@@ -1,7 +1,7 @@
 <div class="container-fluid pt-3">
     <div class="row my-2">
-        <div class="col p-2 text-primary text-center" style="font-size:24px;">
-            LYCA.
+        <div class="col p-2 text-primary text-center" style="font-size:1.5rem;">
+            lyka.
         </div>
     </div>
 </div>
@@ -85,12 +85,7 @@
 
         </div>
 
-
-        
-
-
     </div>
-
 
 </nav>
 
@@ -99,7 +94,7 @@
 <div class="container-fluid mb-5 mt-3 bg-light p-3 rounded">
     <div class="row">
         <div class="col col-2 text-center">
-           
+
                 <!-- <img src="user_photo.png" style="width:100%"> -->
                 <i class="fas fa-user " style="font-size:20px;margin-top:7px"></i>
 

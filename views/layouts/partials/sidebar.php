@@ -1,5 +1,3 @@
-
-
 <div class="input-group md-form form-sm form-2 pl-0 mt-3">
   <input class="form-control my-0 py-1 red-border" type="text" placeholder="Search" aria-label="Search">
   <div class="input-group-append">
@@ -36,4 +34,3 @@
 <div class="alert alert-dark" role="alert">
   This is a dark alert—check it out!
 </div>
-

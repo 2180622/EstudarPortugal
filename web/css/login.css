@@ -22,6 +22,11 @@ body {
   border-top: 6px solid #6A74C9;
 }
 
+#login-form {
+  width: 100%;
+  position: relative;
+}
+
 #form {
   top: 150px;
   position: relative;
@@ -33,21 +38,28 @@ body {
   font-weight: 800;
 }
 
-#loginform-username,
-#loginform-password {
-  padding: 20px;
+.userInput,
+.passInput {
+  font-weight: 700;
   width: 100%;
-  border-radius: 20px;
+  padding: 13px 25px;
+  border-radius: 30px;
   border: 2px solid #ADADAD;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
+}
+
+.userInput::placeholder,
+.passInput::placeholder {
+  font-weight: 700;
 }
 
 .form-group button {
-  border-radius: 25px;
   border: none;
-  padding: 14px 50px;
-  background-color: #6A74C9;
-  text-transform: uppercase;
   font-weight: 700;
+  padding: 14px 50px;
+  border-radius: 25px;
+  text-transform: uppercase;
+  background-color: #6A74C9;
 }
 
 .form-group button:hover {
@@ -56,4 +68,8 @@ body {
 
 .form-horizontal .form-group {
   margin: 0 !important;
+}
+
+.loginBtn{
+  float: right;
 }
