@@ -190,7 +190,7 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
-    public function GetNotifications(){
+    private function GetNotifications(){
         if(Yii::$app->user->isGest){
             return null;
         }
@@ -203,20 +203,23 @@ class SiteController extends Controller
         if(Yii::$app->user->identity->tipo == 'agente' && Yii::$app->user->identity->idAgente != null){
             $Agendas = $modelAgenda->find()->where('idAgente = '.Yii::$app->user->identity->idAgente.' or visibilidade = 1')->all();
         }
+        if($Agendas){
+
+        }
         /**************************** NOTIFICAÇÕES PARA ANIVERSARIOS ****************************/
         $modelAdmin = new Administrador();
         $modelAgente = new Agente();
         $modelCliente = new Cliente();
-        $Agentes = $modelAgente->find()->where('dayofmonth(dataNasc) = dayofmonth(CURRENT_DATE()) and month(dataNasc) = month(CURRENT_DATE()) and tipo like "Agente" and deleted_at = 0')->all();
-        $Admins = $modelAdmin->find()->where('dayofmonth(dataNasc) = dayofmonth(CURRENT_DATE()) and month(dataNasc) = month(CURRENT_DATE()) and deleted_at = 0')->all();
+        $Agentes = $modelAgente->find()->where('dayofmonth(dataNasc) = dayofmonth(current_date()) and month(dataNasc) = month(current_date()) and tipo like "Agente" and deleted_at = 0')->all();
+        $Admins = $modelAdmin->find()->where('dayofmonth(dataNasc) = dayofmonth(current_date()) and month(dataNasc) = month(current_date()) and deleted_at = 0')->all();
         $SubAgentes = null;
         $Clientes = null;
-        $Clients = $modelCliente->find()->where('dayofmonth(dataNasc) = dayofmonth(CURRENT_DATE()) and month(dataNasc) = month(CURRENT_DATE())')->all();
+        $Clients = $modelCliente->find()->where('dayofmonth(dataNasc) = dayofmonth(current_date()) and month(dataNasc) = month(current_date())')->all();
         if(Yii::$app->user->identity->tipo == 'admin' && Yii::$app->user->identity->idAdmin != null){
             $Clientes = $Clients;
         }
         if(Yii::$app->user->identity->tipo == 'agente' && Yii::$app->user->identity->idAgente != null){
-            $Subs = $modelAgente->find()->where('dayofmonth(dataNasc) = dayofmonth(CURRENT_DATE()) and month(dataNasc) = month(CURRENT_DATE()) and tipo like "Subagente" and deleted_at = 0')->all();
+            $Subs = $modelAgente->find()->where('dayofmonth(dataNasc) = dayofmonth(current_date()) and month(dataNasc) = month(current_date()) and tipo like "Subagente" and deleted_at = 0')->all();
             $Produtos = Yii::$app->user->identity->getProdutos()->all();
             foreach($Produtos as $Produto){
                 if($Produto->idSubAgente){
@@ -260,11 +263,20 @@ class SiteController extends Controller
         }
         if(Yii::$app->user->identity->tipo == 'cliente' && Yii::$app->user->identity->idCliente != null){
             $Admins = null;
+            $Agentes = null;
             $SubAgentes = null;
+        }
+        if($Clientes){
+
+        }
+        if($Agentes){
+
+        }
+        if($SubAgentes){
+
         }
         /*************************** NOTIFICAÇÕES PARA SEU ANIVERSARIO **************************/
         $dataNasc = null;
-        $dataHoje = new DateTime();
         if(Yii::$app->user->identity->tipo == 'admin' && Yii::$app->user->identity->idAdmin != null){
             $Admin = Yii::$app->user->identity->getIdAdministrador0()->one();
             $dataNasc = new DateTime($Admin->dataNasc);
@@ -277,11 +289,54 @@ class SiteController extends Controller
             $Cliente = Yii::$app->user->identity->getIdCliente0()->one();
             $dataNasc = new DateTime($Cliente->dataNasc);
         }
-        $diff = $datetime1->diff($datetime2);
-        //                                                                                             return $diff->y;
-        
+        $diff = $dataNasc->diff(new DateTime());
+        if($diff->d == 0 && $diff->m == 0){
+
+        }        
         /*************************** NOTIFICAÇÕES PARA INICIO PRODUTOS **************************/
+
         /************************** NOTIFICAÇÕES PARA VENCIMENTO FASES **************************/
+        $modelFases = new Fase();
+        $Fases = null;
+        $todasFases = $modelFases->find()->wheres('dataVencimento >= current_date() && dataVencimento <= current_date() + interval 7 day')->all();
+        if(Yii::$app->user->identity->tipo == 'admin'){
+            $Fases = $todasFases;
+        }
+        if(Yii::$app->user->identity->tipo == 'agente'){
+            $agenteProdutos = Yii::$app->user->identity->getProdutos0()->all();
+            foreach($agenteProdutos as $produto){
+                $fasesProduto = $produto->getFases()->all();
+                foreach($todasFases as $fase){
+                    foreach($fasesProduto as $faseP){
+                        if($faseP == $fase){
+                            if($Fases){
+                                $Fases[] = $fase;
+                            }else{
+                                $Fases = $fase;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if($Fases){
+
+        }
         /************************* NOTIFICAÇÕES PARA DOCUMENTOS EM FALTA ************************/
+        if(Yii::$app->user->identity->tipo == 'cliente'){
+            $produtosCliente = Yii::$app->user->identity->getProdutos()->all();
+            $fasesCliente = null;
+            foreach($produtosCliente as $produto){
+                $fasesProduto = $produto->getFases()->all();
+                if($fasesCliente){
+                    foreach($fasesProduto as $fase){
+                        $fasesCliente[] = $fase;
+                    }
+                }else{
+                    $fasesCliente = $fasesProduto;
+                }
+                
+            }
+        }
     }
 }

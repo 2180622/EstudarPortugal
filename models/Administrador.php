@@ -11,6 +11,7 @@ use Yii;
  * @property string $nome
  * @property string $apelido
  * @property string $email
+ * @property string $dataNasc
  * @property string|null $fotografia
  * @property int $telefone1
  * @property int|null $telefone2
@@ -35,9 +36,9 @@ class Administrador extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nome', 'apelido', 'email', 'telefone1'], 'required'],
+            [['nome', 'apelido', 'email', 'dataNasc', 'telefone1'], 'required'],
+            [['dataNasc', 'dataRegist'], 'safe'],
             [['telefone1', 'telefone2', 'deleted_at'], 'integer'],
-            [['dataRegist'], 'safe'],
             [['nome', 'apelido', 'email', 'fotografia'], 'string', 'max' => 255],
             [['email'], 'unique'],
         ];

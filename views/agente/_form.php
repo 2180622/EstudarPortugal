@@ -18,6 +18,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'dataNasc')->textInput() ?>
+
+    <?= $form->field($model, 'fotografia')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'morada')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'pais')->textInput(['maxlength' => true]) ?>

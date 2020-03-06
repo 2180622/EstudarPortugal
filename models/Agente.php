@@ -11,6 +11,7 @@ use Yii;
  * @property string $nome
  * @property string $apelido
  * @property string $email
+ * @property string $dataNasc
  * @property string|null $fotografia
  * @property string $morada
  * @property string $pais
@@ -41,10 +42,10 @@ class Agente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nome', 'apelido', 'email', 'morada', 'pais', 'NIF', 'telefoneW', 'tipo'], 'required'],
+            [['nome', 'apelido', 'email', 'dataNasc', 'morada', 'pais', 'NIF', 'telefoneW', 'tipo'], 'required'],
+            [['dataNasc', 'dataRegist'], 'safe'],
             [['telefoneW', 'telefone2', 'deleted_at'], 'integer'],
             [['tipo'], 'string'],
-            [['dataRegist'], 'safe'],
             [['nome', 'apelido', 'email', 'fotografia', 'morada', 'pais', 'NIF'], 'string', 'max' => 255],
             [['email'], 'unique'],
             [['NIF'], 'unique'],
@@ -61,6 +62,7 @@ class Agente extends \yii\db\ActiveRecord
             'nome' => 'Nome',
             'apelido' => 'Apelido',
             'email' => 'Email',
+            'dataNasc' => 'Data Nasc',
             'fotografia' => 'Fotografia',
             'morada' => 'Morada',
             'pais' => 'Pais',

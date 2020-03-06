@@ -6,15 +6,15 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Administradors';
+$this->title = 'Doc Stocks';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="administrador-index">
+<div class="doc-stock-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Administrador', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Doc Stock', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
 
@@ -23,16 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'idAdmin',
-            'nome',
-            'apelido',
-            'email:email',
-            'dataNasc',
-            //'fotografia',
-            //'telefone1',
-            //'telefone2',
-            //'dataRegist',
-            //'deleted_at',
+            'idDocStock',
+            'tipo',
+            'tipoPessoal',
+            'tipoAcademico',
+            'idFaseStock',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
