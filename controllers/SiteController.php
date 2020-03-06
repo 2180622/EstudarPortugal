@@ -194,87 +194,8 @@ class SiteController extends Controller
         if(Yii::$app->user->isGest){
             return null;
         }
-        /****************************** NOTIFICAÇÕES PARA EVENTOS *******************************/
-        $modelAgenda = new Agenda();
-        $Agendas = null;
-        if(Yii::$app->user->identity->tipo == 'admin' && Yii::$app->user->identity->idAdmin != null){
-            $Agendas = $modelAgenda->find()->where('idAdmin = '.Yii::$app->user->identity->idAdmin.' or visibilidade = 1')->orderBy('dataInicio')->all();
-        }
-        if(Yii::$app->user->identity->tipo == 'agente' && Yii::$app->user->identity->idAgente != null){
-            $Agendas = $modelAgenda->find()->where('idAgente = '.Yii::$app->user->identity->idAgente.' or visibilidade = 1')->all();
-        }
-        if($Agendas){
-
-        }
-        /**************************** NOTIFICAÇÕES PARA ANIVERSARIOS ****************************/
-        $modelAdmin = new Administrador();
-        $modelAgente = new Agente();
-        $modelCliente = new Cliente();
-        $Agentes = $modelAgente->find()->where('dayofmonth(dataNasc) = dayofmonth(current_date()) and month(dataNasc) = month(current_date()) and tipo like "Agente" and deleted_at = 0')->all();
-        $Admins = $modelAdmin->find()->where('dayofmonth(dataNasc) = dayofmonth(current_date()) and month(dataNasc) = month(current_date()) and deleted_at = 0')->all();
-        $SubAgentes = null;
-        $Clientes = null;
-        $Clients = $modelCliente->find()->where('dayofmonth(dataNasc) = dayofmonth(current_date()) and month(dataNasc) = month(current_date())')->all();
-        if(Yii::$app->user->identity->tipo == 'admin' && Yii::$app->user->identity->idAdmin != null){
-            $Clientes = $Clients;
-        }
-        if(Yii::$app->user->identity->tipo == 'agente' && Yii::$app->user->identity->idAgente != null){
-            $Subs = $modelAgente->find()->where('dayofmonth(dataNasc) = dayofmonth(current_date()) and month(dataNasc) = month(current_date()) and tipo like "Subagente" and deleted_at = 0')->all();
-            $Produtos = Yii::$app->user->identity->getProdutos()->all();
-            foreach($Produtos as $Produto){
-                if($Produto->idSubAgente){
-                    foreach($Subs as $SubAgente){
-                        $SubAgenteRepetido = 0;
-                        $sub = $Produto->getIdSubAgente0()->one();
-                        if($SubAgentes){
-                            foreach($SubAgentes as $agente){
-                                if($sub==$agente){
-                                    $SubAgenteRepetido = 1;
-                                }
-                            }
-                        }
-                        if($sub == $SubAgente && $SubAgenteRepetido == 0){
-                            if($SubAgentes){
-                                $SubAgentes[] = $sub;
-                            }else{
-                                $SubAgentes = $sub;
-                            }
-                        }
-                    }
-                }
-                if($Produto == $Cli){
-                    $repetido = 1;
-                }
-                $ClienteRepetido = 0;
-                $Cliente = $Produto->getIdCliente0()->one();
-                foreach($Clients as $Cli){
-                    if($Cliente == $Cli){
-                        $repetido = 1;
-                    }
-                }
-                if($repetido==0){
-                    if($Clientes){
-                        $Clientes[] = $Cliente;
-                    }else{
-                        $Clientes = $Cliente;
-                    }
-                }
-            }
-        }
-        if(Yii::$app->user->identity->tipo == 'cliente' && Yii::$app->user->identity->idCliente != null){
-            $Admins = null;
-            $Agentes = null;
-            $SubAgentes = null;
-        }
-        if($Clientes){
-
-        }
-        if($Agentes){
-
-        }
-        if($SubAgentes){
-
-        }
+        $idNot = 0;
+        $Notificacoes = null;
         /*************************** NOTIFICAÇÕES PARA SEU ANIVERSARIO **************************/
         $dataNasc = null;
         if(Yii::$app->user->identity->tipo == 'admin' && Yii::$app->user->identity->idAdmin != null){
@@ -291,52 +212,151 @@ class SiteController extends Controller
         }
         $diff = $dataNasc->diff(new DateTime());
         if($diff->d == 0 && $diff->m == 0){
-
+            $Assunto = 'PARABÉNS '.Yii::$app->user->identity->nome.' '.Yii::$app->user->identity->apelido;
+            $Descricao = 'Hoje um ciclo de sua vida se finaliza e outro recomeça. Faça deste novo recomeço uma nova oportunidade para fazer tudo o que sempre sonhou! \nParabéns!';
+            $idNot++;
+            $Notificacoes = [
+                'Id' => $idNot,
+                'Tipo' => 'Aniversario',
+                'Assunto' => $Assunto,
+                'Descricao' => $Descricao,
+                'DataLimite' => null,
+                'DataInicio' => null,
+            ];
         }        
         /*************************** NOTIFICAÇÕES PARA INICIO PRODUTOS **************************/
 
         /************************** NOTIFICAÇÕES PARA VENCIMENTO FASES **************************/
-        $modelFases = new Fase();
-        $Fases = null;
-        $todasFases = $modelFases->find()->wheres('dataVencimento >= current_date() && dataVencimento <= current_date() + interval 7 day')->all();
-        if(Yii::$app->user->identity->tipo == 'admin'){
-            $Fases = $todasFases;
-        }
         if(Yii::$app->user->identity->tipo == 'agente'){
+            $modelFases = new Fase();
+            $Fases = null;
+            $Assunto = 'Clientes com documentos ou pagamentos em atraso';
+            $Descricao = null;
+            $todasFases = $modelFases->find()->where('dataVencimento >= current_date() && dataVencimento <= current_date() + interval 7 day')->all();
             $agenteProdutos = Yii::$app->user->identity->getProdutos0()->all();
-            foreach($agenteProdutos as $produto){
-                $fasesProduto = $produto->getFases()->all();
-                foreach($todasFases as $fase){
-                    foreach($fasesProduto as $faseP){
-                        if($faseP == $fase){
-                            if($Fases){
-                                $Fases[] = $fase;
-                            }else{
-                                $Fases = $fase;
+            if($agenteProdutos && $todasFases){
+                foreach($agenteProdutos as $produto){
+                    $fasesProduto = $produto->getFases()->all();
+                    foreach($todasFases as $fase){
+                        foreach($fasesProduto as $faseP){
+                            if($faseP == $fase){
+                                $DocsAcademicos = $fase->getDocAcademicos()->where('verificacao = 0')->all();
+                                $DocsPessoais = $fase->getDocPessoals()->where('verificacao = 0')->all();
+                                if(count($DocsAcademicos) >=1 || count($DocsAcademicos) >=1 || $fase->verificacaoPago == 0){
+                                    if($Fases){
+                                        $Fases[] = $fase;
+                                    }else{
+                                        $Fases = $fase;
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
+            if($Fases){
+                $Descricao = 'Clientes: ';
+                foreach($Fases as $fase){
+                    $produto = $fase->getIdProduto0()->one();
+                    $cliente = $produto->getIdCliente0()->one();
+                    $diff = (new DateTime($fase->dataVencimento))->diff(new DateTime());
+                    $Descricao = $Descricao.'\n - '.$cliente->nome.' '.$cliente->apelido.' -> '.$diff->d.' dias';
+                }
+                $idNot++;
+                $novaNot = [
+                    'Id' => $idNot,
+                    'Tipo' => 'Fases',
+                    'Assunto' => $Assunto,
+                    'Descricao' => $Descricao,
+                    'DataLimite' => null,
+                    'DataInicio' => null,
+                ];
+                if($Notificacoes){
+                    $Notificacoes[] = $novaNot;
+                }else{
+                    $Notificacoes = $novaNot;
+                }
+            }
         }
-        if($Fases){
-
-        }
-        /************************* NOTIFICAÇÕES PARA DOCUMENTOS EM FALTA ************************/
+        /******************* NOTIFICAÇÕES PARA DOCUMENTOS E PAGAMENTOS EM FALTA *****************/
+        $FasesFalta = null;
         if(Yii::$app->user->identity->tipo == 'cliente'){
             $produtosCliente = Yii::$app->user->identity->getProdutos()->all();
             $fasesCliente = null;
             foreach($produtosCliente as $produto){
-                $fasesProduto = $produto->getFases()->all();
-                if($fasesCliente){
-                    foreach($fasesProduto as $fase){
-                        $fasesCliente[] = $fase;
+                $fasesProduto = $produto->getFases()->where('dataVencimento >= current_date() && dataVencimento <= current_date() + interval 14 day')->all();
+                if($fasesProduto){
+                    if($fasesCliente){
+                        foreach($fasesProduto as $fase){
+                            $fasesCliente[] = $fase;
+                        }
+                    }else{
+                        $fasesCliente = $fasesProduto;
                     }
-                }else{
-                    $fasesCliente = $fasesProduto;
                 }
-                
+            }
+            if($fasesCliente){
+                foreach($fasesCliente as $fase){
+                    $falta = false;
+                    $docsAcademicos = $fase->getDocAcademicos()->where('verificacao = 0')->all();
+                    $docsPessoais = $fase->getDocPessoals()->where('verificacao = 0')->all();
+                    if($fase->verificacaoPago = 0 || $docsAcademicos || $docsPessoais){
+                        $falta = true;
+                    }
+                    if($falta){
+                        if($FasesFalta){
+                            $FasesFalta[] = $fase;
+                        }else{
+                            $FasesFalta = $fase;
+                        }
+                    }
+                }
             }
         }
+        if($FasesFalta){
+            foreach($FasesFalta as $Fase){
+                $DocsAcademicos = $Fase->getDocAcademicos()->where('verificacao = 0')->all();
+                $DocsPessoais = $Fase->getDocPessoals()->where('verificacao = 0')->all();
+                $novaNot = null;
+                $Assunto = null;
+                $Descricao = null;
+                $diff = (new DateTime($Fase->dataVencimento))->diff(new DateTime());
+                $DataLimite = 'Falta '.$diff->d.' dias';
+                if($diff == 0){
+                    $DataLimite = 'Só falta hoje';
+                }
+                $NumDocumentos = $NumDocumentos + count($DocsAcademicos) + count($DocsPessoais);
+                if($Fase->verificacaoPago == 0 && $NumDocumentos >= 1){
+                    $Assunto = 'Pagamento e documentos em Falta';
+                    $Descricao = 'Pagamento em falta: \n - '.$Fase->descricao.' -> '.$Fase->valorFase.'€ \n\nDocumentos em Falta: \n - '.count($DocsAcademicos).' Documentos Académicos \n - '.count($DocsPessoais).' Documentos Pessoais';
+                }else{
+                    if($Fase->verificacaoPago == 0){
+                        $Assunto = 'Pagamento em Falta';
+                        $Descricao = 'Pagamento em falta: \n - '.$Fase->descricao.' -> '.$Fase->valorFase.'€';
+                    }
+                    if($NumDocumentos >= 1){
+                        $Assunto = 'Documentos em Falta';
+                        $Descricao = 'Documentos em Falta: \n - '.count($DocsAcademicos).' Documentos Académicos \n - '.count($DocsPessoais).' Documentos Pessoais';
+                    }
+                }
+                if($Fase->verificacaoPago == 0 || $NumDocumentos >= 1){
+                    $idNot++;
+                    $novaNot = [
+                        'Id' => $idNot,
+                        'Tipo' => 'Falta',
+                        'Assunto' => $Assunto,
+                        'Descricao' => $Descricao,
+                        'DataLimite' => $DataLimite,
+                        'DataInicio' => null,
+                    ];
+                    if($Notificacoes){
+                        $Notificacoes[] = $novaNot;
+                    }else{
+                        $Notificacoes = $novaNot;
+                    }
+                }
+            }
+        }
+        return $Notificacoes;
     }
 }
