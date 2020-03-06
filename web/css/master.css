@@ -1,18 +1,8 @@
+/* lyka blue: #6A74C9 */
+
 html,body{
     height: 100%;
     font-family: 'Nunito', sans-serif;
     font-weight: 700;
-}
-
-body{
     background-color: #EAEAEA;
 }
-
-.divider{
-    height: 1px;
-    background-color: lightgray;
-}
-
-.input-group.md-form.form-sm.form-2 input.amber-border {
-    border: 1px solid #ffca28;
-  }
