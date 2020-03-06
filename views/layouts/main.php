@@ -43,9 +43,8 @@ AppAsset::register($this);
 
         <!-- Conteudo Principal -->
         <div class="col col-8 col-sm-8 col-md-8 col-lg-8" >
-            <?php require __DIR__ . '/testcontent.php' ?>
+            <?=$content?>
         </div>
-
 
         <!--Barra Direita (notificações) -->
         <div class="col col-2 bg-white sidebar shadow" style="overflow:hidden">

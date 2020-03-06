@@ -76,15 +76,14 @@ class SiteController extends Controller
      * Displays homepage.
      *
      * @return string
-     */
+     */                                                 
     public function actionIndex()
     {
         $model = new LoginForm();
 
         if (Yii::$app->user->isGuest) {
             return $this->render('login', [
-                'model' => $model
-            ]);
+                'model' => $model,]);
         }
 
         return $this->render('index');
@@ -148,6 +147,7 @@ class SiteController extends Controller
             $user->status = 10;
             //$user->created_at = date('Y-m-d');
             $user->generateAuthKey();
+            $admin->dataNasc = "2000-10-10";
             if($user->validate() && $admin->validate()){
                 $user->save();
                 $admin->save();

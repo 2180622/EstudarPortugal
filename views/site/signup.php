@@ -19,6 +19,7 @@ $this->title = 'Criar um admin';
     <?= $form->field($admin, 'nome')->textInput() ?>
     <?= $form->field($admin, 'apelido')->textInput() ?>
     <?= $form->field($admin, 'email')->textInput() ?>
+    <?= $form->field($admin, 'dataNasc')->textInput() ?>
     <?= $form->field($admin, 'telefone1')->textInput()->label('Telefone 1') ?>
     <?= $form->field($admin, 'telefone2')->textInput()->label('Telefone 2') ?>
     <?= $form->field($user, 'rawPassword')->passwordInput()->label('Password') ?>
