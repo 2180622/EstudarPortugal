@@ -12,6 +12,7 @@ use Yii;
  * @property string $dataVencimento
  * @property string|null $updated_at
  * @property float $valorFase
+ * @property int $verificacaoPago
  * @property float $valorComissaoAgente
  * @property float|null $valorComSubAgente
  * @property int $idProduto
@@ -42,7 +43,7 @@ class Fase extends \yii\db\ActiveRecord
             [['descricao', 'dataVencimento', 'valorFase', 'valorComissaoAgente', 'idProduto'], 'required'],
             [['dataVencimento', 'updated_at'], 'safe'],
             [['valorFase', 'valorComissaoAgente', 'valorComSubAgente'], 'number'],
-            [['idProduto'], 'integer'],
+            [['verificacaoPago', 'idProduto'], 'integer'],
             [['descricao'], 'string', 'max' => 255],
             [['idProduto'], 'exist', 'skipOnError' => true, 'targetClass' => Produto::className(), 'targetAttribute' => ['idProduto' => 'idProduto']],
         ];
@@ -59,6 +60,7 @@ class Fase extends \yii\db\ActiveRecord
             'dataVencimento' => 'Data Vencimento',
             'updated_at' => 'Updated At',
             'valorFase' => 'Valor Fase',
+            'verificacaoPago' => 'Verificacao Pago',
             'valorComissaoAgente' => 'Valor Comissao Agente',
             'valorComSubAgente' => 'Valor Com Sub Agente',
             'idProduto' => 'Id Produto',

@@ -13,41 +13,45 @@ AppAsset::register($this);
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 
-<!-- head - CSS Styles -->
+<!-- head - METAS, TITLE, CSS Styles -->
 <?php require __DIR__ . '/partials/head.php' ?>
-    <meta charset="<?= Yii::$app->charset ?>">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?php $this->registerCsrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
-    <?php $this->head() ?>
-</head>
+
+
+
+
 
 <!-- body - SECÇÃO PRINCIPAL -->
 <body>
 <?php $this->beginBody() ?>
 
-<div class="container-fluid">
-    <div class="row " >
+<div class="container-fluid h-100 bg-dark">
 
-        <!-- Menu principal - Esquerda -->
-        <div class="col col-2 main-menu bg-white shadow"  style="overflow:hidden">
-            <?php require __DIR__ . '/partials/main_menu.php' ?>
-        </div>
+</div>
 
         <!-- Conteudo Principal -->
         <div class="col col-8 col-sm-8 col-md-8 col-lg-8" >
-            <?=$content ?>
+            <?=$content?>
         </div>
-
 
         <!--Barra Direita (notificações) -->
         <div class="col col-2 bg-white sidebar shadow" style="overflow:hidden">
             <?php require __DIR__ . '/partials/sidebar.php' ?>
         </div>
 
-    </div>
-</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </body>
 

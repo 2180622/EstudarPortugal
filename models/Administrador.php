@@ -54,7 +54,7 @@ class Administrador extends \yii\db\ActiveRecord
             'nome' => 'Nome',
             'apelido' => 'Apelido',
             'email' => 'Email',
-            'dataNasc' => 'Data Nasc',
+            'dataNasc' => 'Data de Nascimento',
             'fotografia' => 'Fotografia',
             'telefone1' => 'Telefone1',
             'telefone2' => 'Telefone2',
