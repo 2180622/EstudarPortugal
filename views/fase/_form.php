@@ -20,6 +20,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'valorFase')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'verificacaoPago')->textInput() ?>
+
     <?= $form->field($model, 'valorComissaoAgente')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'valorComSubAgente')->textInput(['maxlength' => true]) ?>

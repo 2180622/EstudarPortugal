@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'dataVencimento',
             'updated_at',
             'valorFase',
+            //'verificacaoPago',
             //'valorComissaoAgente',
             //'valorComSubAgente',
             //'idProduto',
